@@ -1,0 +1,27 @@
+name: oneshot
+services:
+  blog:
+    build: ./docker/blog
+	dockerfile: Dockerfile
+    ports:
+      - 55
+	environment:
+	  - HOME=/home/user
+    deploy:
+      mode: replicated
+      replicas: 2
+
+  ng:
+    build: ./docker/ng
+	dockerfile: Dockerfile
+	ports:
+	  - "80:80"
+	environment:
+	  - HOME=/home/user
+	
+  db:
+    build: ./docker/db
+	dockerfile: Dockerfile
+	environment:
+	  - HOME=/home/usr
+	
