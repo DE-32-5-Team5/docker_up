@@ -12,7 +12,7 @@ services:
       replicas: 2
 
   ng:
-    build: ./docker/ng
+    build: ./docker/ngrinder
 	dockerfile: Dockerfile
 	ports:
 	  - "80:80"
