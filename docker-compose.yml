@@ -19,8 +19,11 @@ services:
 	  - HOME=/home/user
 	
   db:
-    build: ./docker/db
-	dockerfile: Dockerfile
-	environment:
-	  - HOME=/home/usr
+	  image: my-mariadb
+		container_name: mariadb_container
+		env_file:
+		  - .env  # 환경 변수 파일 경로
+	  ports:
+		  - "3306:3306"  # 포트 매핑
+
 	

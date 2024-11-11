@@ -16,7 +16,8 @@ def main():
 	Docker_up
 	version 0.2.0
 
-	This Project is practice project that learn skills about docker-compose and consider project architecture that our final project. This package make 3 docker-containers in your local system. each container named blog, nginx, db.
+	This Project is practice project that learn skills about docker-compose and consider project architecture that our final project. 
+	This package make 3 docker-containers in your local system. each container named blog, nginx, db.
 
 	Blog container include Grafana dashboard system and our Homepage using streamlit.
 	Nginx container include Promtheus overwatch system and ab : stress test system.
@@ -24,18 +25,18 @@ def main():
 
 	Commands
 	oneshot, oneshot -h, --help		: Show command help screen
-					 -i, --init		: Install Docker Containers 
+	                 -i, --init		: Install Docker Containers 
 	
 
 	"""
 	)
   elif args.init:
     try:
-	  subprocess.run(['docker-compose', 'build', '--no-cache'], check=True)
-	  subprocess.run(['docker-compose', 'up', '-d'], check=True)
-	except subprocess.CalledProcessError as e:
-	  print(f"오류 발생: {e}")
-	  print("docker-compose 명령어 실행에 실패했습니다. Docker Compose가 설치되어 있는지 확인해주세요.")
+      subprocess.run(['docker-compose', 'build', '--no-cache'], check=True)
+      subprocess.run(['docker-compose', 'up', '-d'], check=True)
+    except subprocess.CalledProcessError as e:
+      print(f"오류 발생: {e}")
+      print("docker-compose 명령어 실행에 실패했습니다. Docker Compose가 설치되어 있는지 확인해주세요.")
 
 
 if __name__ == '__main__':

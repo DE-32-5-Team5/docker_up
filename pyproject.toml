@@ -14,5 +14,5 @@ license = {text = "MIT"}
 [tool.pdm]
 distribution = false
 
-[project.script]
-oneshot = 'oneshot.setup:main'
+[project.scripts]
+oneshot = 'docker_up.setup:main'
