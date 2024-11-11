@@ -1,4 +1,5 @@
 ## TODO
 ## Docker compose setting - blog
-## Require : Grafana
+
+## Require : Grafana install
 ## Require : app.py - Homepage
