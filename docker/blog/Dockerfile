@@ -28,7 +28,7 @@ COPY ./requirements.txt ./requirements.txt
 RUN pip install -r ./requirements.txt
 
 # Grafana와 Streamlit 기본 포트
-EXPOSE 8501
+EXPOSE 8501 3000
 
 # Streamlit의 health check
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
