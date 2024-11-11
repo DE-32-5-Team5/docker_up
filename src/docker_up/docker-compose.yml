@@ -1,41 +1,39 @@
 name: oneshot
 services:
+  db:
+    image: mariadb:latest
+    container_name: mariadb_container
+    env_file:
+      - .env  # 환경 변수 파일 경로
+    ports:
+      - "3551:3551"  # 포트 매핑
+
   blog:
     build: 
-	  context: ./docker/blog
-	  dockerfile: Dockerfile
+      context: ./docker/blog
+      dockerfile: Dockerfile
     ports:
       - "8501:8501" # Streamlit port
-	  - "3000:3000" # Grafana port
-	environment:
-	  - HOME=/home/user
-	depends_on:
-	  - db
+      - "3000:3000" # Grafana port
+    environment:
+      - HOME=/home/user
+    depends_on:
+      - db
 
   ng:
     build: 
-		  context: ./docker/nginx
+      context: ./docker/nginx
       dockerfile: Dockerfile
-		image: nginx-image:latest
-		ports:
-      - "80:80"
-			- "443:443"
-			- "9090:9090" # Prometheus 포트
-		volumns:
-		  - ./nginx_data:/etc/nginx/conf.d  # nginx 설정 파일 저장 경로 (필요시 변경)
-			- /prometheus-2.53.3.linux-amd64  # Prometheus 데이터 저장 경로 (필요시 변경)
-			- ./ngrinder_data:/ngrinder-controller-3.5.9-p1  # ngrinder 데이터 저장 경로 (필요시 변경)
-		depends_on:
-		  - blog
+    image: nginx:1.25
+    ports:
+      - "60:60"
+      - "443:443"
+      - "9090:9090" # Prometheus 포트
+    volumes:
+      - ./nginx_data:/etc/nginx/conf.d  # nginx 설정 파일 저장 경로 (필요시 변경)
+      - /prometheus-2.53.3.linux-amd64  # Prometheus 데이터 저장 경로 (필요시 변경) 
+      - ./ngrinder_data:/ngrinder-controller-3.5.9-p1  # ngrinder 데이터 저장 경로 (필요시 변경)
     environment:
-	  - HOME=/home/user
-	
-  db:
-	  image: my-mariadb
-		container_name: mariadb_container
-		env_file:
-		  - .env  # 환경 변수 파일 경로
-	  ports:
-		  - "3306:3306"  # 포트 매핑
-
-	
+      - HOME=/home/user
+    depends_on:
+      - blog
