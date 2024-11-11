@@ -1,15 +1,14 @@
 name: oneshot
 services:
   blog:
-    build: ./docker/blog
-	dockerfile: Dockerfile
+    build: 
+	  context: ./docker/blog
+	  dockerfile: Dockerfile
     ports:
-      - 55
+      - "8501:8501" # Streamlit port
+	  - "3000:3000" # Grafana port
 	environment:
 	  - HOME=/home/user
-    deploy:
-      mode: replicated
-      replicas: 2
 
   ng:
     build: ./docker/ngrinder
