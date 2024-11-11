@@ -32,8 +32,7 @@ def main():
 	)
   elif args.init:
     try:
-      subprocess.run(['docker-compose', 'build', '--no-cache'], check=True)
-      subprocess.run(['docker-compose', 'up', '-d'], check=True)
+      subprocess.run(['docker', 'compose', 'up', '-d'], check=True)
     except subprocess.CalledProcessError as e:
       print(f"오류 발생: {e}")
       print("docker-compose 명령어 실행에 실패했습니다. Docker Compose가 설치되어 있는지 확인해주세요.")
