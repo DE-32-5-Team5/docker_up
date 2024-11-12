@@ -9,12 +9,12 @@ services:
       - "3551:3551"  # 포트 매핑
 
   blog:
-    build: 
+    build:
       context: ./docker/blog
       dockerfile: Dockerfile
     ports:
       - "8501:8501" # Streamlit port
-     deploy:
+    deploy:
       mode: replicated
       replicas: 1
       resources:
@@ -39,9 +39,9 @@ services:
     container_name: grafana_container
     environment:
       - HOME=/home/user
-        
+
   ng:
-    build: 
+    build:
       context: ./docker/nginx
       dockerfile: Dockerfile
     image: nginx:1.25
@@ -52,9 +52,10 @@ services:
     container_name: nginx_container
     volumes:
       - ./nginx_data:/etc/nginx/conf.d  # nginx 설정 파일 저장 경로 (필요시 변경)
-      - /prometheus-2.53.3.linux-amd64  # Prometheus 데이터 저장 경로 (필요시 변경) 
+      - /prometheus-2.53.3.linux-amd64  # Prometheus 데이터 저장 경로 (필요시 변경)
       - ./ngrinder_data:/ngrinder-controller-3.5.9-p1  # ngrinder 데이터 저장 경로 (필요시 변경)
     environment:
       - HOME=/home/user
     depends_on:
       - blog
+
