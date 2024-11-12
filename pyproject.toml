@@ -1,7 +1,7 @@
 [project]
 name = "docker_up"
 version = "0.3.0"
-description = ""
+description = "Default template for PDM package"
 authors = [
     {name = "Life_is_one_Shot", email = "elnath1002@naver.com"},
 ]
