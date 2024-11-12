@@ -3,7 +3,6 @@ import argparse
 import subprocess
 import os
 from docker_up.init import installenv
-from docker_up.init_db import installdb
 
 def main():
   parser = argparse.ArgumentParser(description='BCS 도움말', add_help=False)
@@ -36,9 +35,7 @@ def main():
 	)
   elif args.init:
     try:
-
-      installenv()
-      installdb()		 
+      installenv()	 
       subprocess.run(['docker', 'compose', 'up', '-d'], check=True)
     except subprocess.CalledProcessError as e:
       print("docker-compose 명령어 실행에 실패했습니다.")

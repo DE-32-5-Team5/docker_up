@@ -5,4 +5,6 @@
 ## Require : docker exporter install
 ## 0.2
 
-COPY mariadb:latest
+FROM mariadb:latest
+
+COPY ../../init.sql /docker-entrypoint-initdb.d/
