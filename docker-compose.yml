@@ -13,7 +13,7 @@ services:
       context: ./docker/blog
       dockerfile: Dockerfile
     ports:
-      - "8501:8501" # Streamlit port
+      - "8501" # Streamlit port
     deploy:
       mode: replicated
       replicas: 1
@@ -24,7 +24,7 @@ services:
         limits:
           cpus: '0.02'
           memory: 70M
-    container_name: streamlit_container
+    #container_name: streamlit_container-1
     environment:
       - HOME=/home/user
     depends_on:
