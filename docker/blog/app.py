@@ -21,7 +21,7 @@ import os
 def main():
     #st.set_page_config(layout="wide")
     with st.sidebar:
-        choice = option_menu("Menu", ['Scale'],
+        choice = option_menu("Menu", ['Scale', 'Graph'],
                             icons=['bi bi-people', 'bi bi-map'],
                             menu_icon="bi bi-app-indicator", default_index=0,
                             styles={
@@ -48,6 +48,8 @@ def main():
         if st.button('Container Scale', type = "primary"):
             subprocess.run(["docker", "compose", "scale", f"parking={scale_num}"])
             st.subheader(f'스케일링 완료, 컨테이너 개수 : {scale_num}')
+    elif choice == "Graph":
+        st.title("Prometheus")
 
 if __name__ == '__main__':
     main()
