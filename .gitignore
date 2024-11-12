@@ -162,7 +162,7 @@ cython_debug/
 #.idea/
 
 # ngrinder
-build
-nginx_data
-ngrinder_data
-ngrinder_controller
+build/
+nginx_data/
+ngrinder_data/
+ngrinder_controller/
