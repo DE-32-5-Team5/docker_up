@@ -1,4 +1,9 @@
-grafana-storage
+grafana-storage/
+build/
+nginx_data/
+ngrinder_data/
+ngrinder-controller/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
