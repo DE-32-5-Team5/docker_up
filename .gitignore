@@ -1,8 +1,9 @@
+# About Container's file
 grafana-storage/
-build/
-nginx_data/
-ngrinder_data/
-ngrinder-controller/
+nginx_data
+ngrinder_data
+ngrinder-controller
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -167,9 +168,4 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# ngrinder
-build/
-nginx_data/
-ngrinder_data/
-ngrinder_controller/
-ngrinder-controller/
+

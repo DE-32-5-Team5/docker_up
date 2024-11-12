@@ -5,8 +5,12 @@ services:
     container_name: mariadb_container
     env_file:
       - .env  # 환경 변수 파일 경로
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+    command: ["mysqld", "--init-file=/docker-entrypoint-initdb.d/init.sql"]
     ports:
       - "3551:3551"  # 포트 매핑
+    
 
   blog:
     build: 

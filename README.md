@@ -13,6 +13,17 @@ $ pdm venv create
 $ source .venv/bin/activate
 $ pip install .
 $ oneshot -i
+Initialize env setting...
+Enter Database root password : <your root password>
+Enter Database Name : <your database>
+Enter User Name : <your user name>
+Enter user Password : <your user password>
+env install complete.
+[+] Running 4/4
+ ✔ Network oneshot_default      Created                                                                            0.2s
+ ✔ Container mariadb_container  Started                                                                            0.6s
+ ✔ Container oneshot-blog-1     Started                                                                            0.9s
+ ✔ Container oneshot-ng-1       Started 
 ```
 
 ``` bash
