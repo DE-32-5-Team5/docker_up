@@ -1,3 +1,4 @@
+*.swp
 grafana-storage/
 build/
 nginx_data/
