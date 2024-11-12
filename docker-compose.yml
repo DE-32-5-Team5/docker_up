@@ -14,12 +14,22 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8501:8501" # Streamlit port
-      - "3000:3000" # Grafana port
+    container_name: streamlit_container
     environment:
       - HOME=/home/user
     depends_on:
       - db
 
+  dashboard:
+    build:
+      context: ./docker/dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Grafana port
+    container_name: grafana_container
+    environment:
+      - HOME=/home/user
+        
   ng:
     build: 
       context: ./docker/nginx
@@ -29,6 +39,7 @@ services:
       - "60:60"
       - "443:443"
       - "9090:9090" # Prometheus 포트
+    container_name: nginx_container
     volumes:
       - ./nginx_data:/etc/nginx/conf.d  # nginx 설정 파일 저장 경로 (필요시 변경)
       - /prometheus-2.53.3.linux-amd64  # Prometheus 데이터 저장 경로 (필요시 변경) 
