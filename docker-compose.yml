@@ -16,7 +16,17 @@ services:
       context: ./docker/blog
       dockerfile: Dockerfile
     ports:
-      - "8501" # Streamlit port
+      - "8501:8501" # Streamlit port
+    container_name: streamlit_container
+    environment:
+      - HOME=/home/user
+    depends_on:
+      - db
+      
+  parking:
+    build: ./docker/httpd
+    ports:
+      - 80
     deploy:
       mode: replicated
       replicas: 1
@@ -25,13 +35,11 @@ services:
           cpus: '0.05'
           memory: 50M
         limits:
-          cpus: '0.02'
-          memory: 70M
-    #container_name: streamlit_container-1
+          cpus: '0.01'
+          memory: 50M
     environment:
-      - HOME=/home/user
-    depends_on:
-      - db
+      - VIRTUAL_HOST=localhost
+      - VIRTUAL_PORT=80
 
   dashboard:
     image: grafana/grafana-enterprise
