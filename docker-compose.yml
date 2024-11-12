@@ -22,8 +22,8 @@ services:
           cpus: '0.05'
           memory: 50M
         limits:
-          cpus: '0.01'
-          memory: 50M
+          cpus: '0.02'
+          memory: 70M
     container_name: streamlit_container
     environment:
       - HOME=/home/user
