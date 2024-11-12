@@ -30,3 +30,4 @@ $ docker compose up -d -f docker-compose.yml -f ng-compose.yml --force-rec
 
 ## Usage
 
+## autoscale
