@@ -1,8 +1,8 @@
 import os
 
 def install():
-    if os.path.exists(".env"):
-        print(".env 파일이 이미 존재합니다.")
+    if os.path.exists(".env") and os.path.exists(".my.cnf"):
+        print(".env 파일과 .my.cnf 파일이 이미 존재합니다.")
         return
     
     print("Initialize env setting...")
@@ -17,5 +17,11 @@ def install():
         f.write(f"MARIADB_USER={user_name}\n")
         f.write(f"MARIADB_PASSWORD={user_password}\n")
     
-    print("env install complete.")
+    with open(".my.cnf", "w") as f:
+        f.write(f"user={user_name}\n")
+        f.write(f"password={user_password}\n")
+        f.write(f"host=localhost\n")
+        f.write(f"port=3551\n")
+
+    print("env, exporter cnf install complete.")
     return

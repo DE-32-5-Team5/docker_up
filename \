@@ -10,7 +10,7 @@ services:
       - .my.cnf # exporter 환경변수 파일경로
     ports:
       - "3551:3551"  # 포트 매핑
-    command: bash -c ./docker/db/env.sh
+    command: source ./env.sh
   blog:
     build: 
       context: ./docker/blog
