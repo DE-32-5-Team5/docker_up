@@ -19,15 +19,17 @@ Enter Database Name : <your database>
 Enter User Name : <your user name>
 Enter user Password : <your user password>
 env install complete.
-[+] Running 4/4
- ✔ Network oneshot_default      Created                                                                            0.2s
- ✔ Container mariadb_container  Started                                                                            0.6s
- ✔ Container oneshot-blog-1     Started                                                                            0.9s
- ✔ Container oneshot-ng-1       Started 
+[+] Running 6/6
+ ✔ Network oneshot_default         Created                                                                                                                           0.1s
+ ✔ Container mariadb_container     Started                                                                                                                           0.7s
+ ✔ Container oneshot-controller-1  Started                                                                                                                           0.9s
+ ✔ Container oneshot-agent-1       Started                                                                                                                           1.4s
+ ✔ Container oneshot-blog-1        Started                                                                                                                           1.3s
+ ✔ Container oneshot-ng-1          Started
 ```
 
 ``` bash
-#manual installation
+# manual installation
 
 $ docker compose up -d -f docker-compose.yml -f ng-compose.yml --force-rec
 
@@ -38,6 +40,16 @@ $ docker compose up -d -f docker-compose.yml -f ng-compose.yml --force-rec
  ✔ Container team5-load_balancer-1  Started                                                     1.9s
  ✔ Container team5-agent-1          Started                                                     1.1s
 ```
-
+### Containers remove
+``` bash
+$ oneshot -d
+[+] Running 6/6
+ ✔ Container oneshot-agent-1       Removed                                                                                                                          10.5s
+ ✔ Container oneshot-ng-1          Removed                                                                                                                           2.6s
+ ✔ Container oneshot-blog-1        Removed                                                                                                                           1.7s
+ ✔ Container mariadb_container     Removed                                                                                                                           3.7s
+ ✔ Container oneshot-controller-1  Removed                                                                                                                          12.7s
+ ✔ Network oneshot_default         Removed 
+```
 ## Usage
 
