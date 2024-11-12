@@ -36,18 +36,18 @@ def main():
   elif args.init:
     try:
       install()		 
-      subprocess.run(['docker', 'compose', 'up', '-d'], check=True)
-    except subprocess.CalledProcessError as e:
-      print("docker-compose 명령어 실행에 실패했습니다.")
-      print(f"Error Message : {e}")
-  
-  elif args.down:
-    try:
-      subprocess.run(['docker','compose','down'], check=True)
+      subprocess.run(['docker', 'compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml', 'up', '-d', '--force-recreate',], check=True)
+          
     except subprocess.CalledProcessError as e:
       print("docker-compose 명령어 실행에 실패했습니다.")
       print(f"Error Message : {e}")
 
+  elif args.down:
+    try:
+      subprocess.run(['docker','compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml','down'], check=True)
+    except subprocess.CalledProcessError as e:
+      print("docker-compose 명령어 실행에 실패했습니다.")
+      print(f"Error Message : {e}")
 
 if __name__ == '__main__':
   main()
