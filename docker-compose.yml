@@ -14,6 +14,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8501:8501" # Streamlit port
+     deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        reservations:
+          cpus: '0.05'
+          memory: 50M
+        limits:
+          cpus: '0.01'
+          memory: 50M
     container_name: streamlit_container
     environment:
       - HOME=/home/user
