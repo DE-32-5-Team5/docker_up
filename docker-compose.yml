@@ -7,12 +7,19 @@ services:
     container_name: mariadb_container
     env_file:
       - .env  # 환경 변수 파일 경로
-      - .my.cnf # exporter 환경변수 파일경로
+      - ./docker/db/.my.cnf # exporter 환경변수 파일경로
     ports:
       - "3551:3551"  # 포트 매핑
-    command: bash -c ./docker/db/env.sh
-      
-  parking:
+    volumes:
+      - ./docker/db:/download/mysqld_exporter-0.15.1.linux-amd64/setting/
+    command: > 
+      ./mysqld_exporter-0.15.1.linux-amd64/mysqld_exporter --config.my-cnf=/download/mysqld_exporter-0.15.1.linux-amd64/setting/.my.cnf
+  blog:
+    build: 
+      context: ./docker/blog
+      dockerfile: Dockerfile
+
+parking:
     build: ./docker/httpd
     ports:
       - 80
