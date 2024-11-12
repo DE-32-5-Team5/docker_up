@@ -10,24 +10,14 @@ services:
       - .my.cnf # exporter 환경변수 파일경로
     ports:
       - "3551:3551"  # 포트 매핑
-    command: bash -c ./docker/db/env.sh
+    command: source ./env.sh
   blog:
-    build:
+    build: 
       context: ./docker/blog
       dockerfile: Dockerfile
     ports:
-      - "8501" # Streamlit port
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        reservations:
-          cpus: '0.05'
-          memory: 50M
-        limits:
-          cpus: '0.02'
-          memory: 70M
-    #container_name: streamlit_container-1
+      - "8501:8501" # Streamlit port
+    container_name: streamlit_container
     environment:
       - HOME=/home/user
     depends_on:
@@ -44,7 +34,7 @@ services:
     restart: unless-stopped
         
   ng:
-    build:
+    build: 
       context: ./docker/nginx
       dockerfile: Dockerfile
     image: nginx:1.25
@@ -61,4 +51,3 @@ services:
       - HOME=/home/user
     depends_on:
       - blog
-
