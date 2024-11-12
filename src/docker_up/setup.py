@@ -2,7 +2,7 @@ import sys
 import argparse
 import subprocess
 import os
-from docker_up.init import install
+from docker_up.init import installenv
 
 def main():
   parser = argparse.ArgumentParser(description='BCS 도움말', add_help=False)
@@ -35,7 +35,7 @@ def main():
 	)
   elif args.init:
     try:
-      install()		 
+      installenv()		 
       subprocess.run(['docker', 'compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml', 'up', '-d', '--force-recreate',], check=True)
           
     except subprocess.CalledProcessError as e:
