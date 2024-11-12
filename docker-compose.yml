@@ -11,18 +11,7 @@ services:
     ports:
       - "3551:3551"  # 포트 매핑
     command: bash -c ./docker/db/env.sh
-  blog:
-    build:
-      context: ./docker/blog
-      dockerfile: Dockerfile
-    ports:
-      - "8501:8501" # Streamlit port
-    container_name: streamlit_container
-    environment:
-      - HOME=/home/user
-    depends_on:
-      - db
-      
+
   parking:
     build: ./docker/httpd
     ports:
@@ -68,5 +57,5 @@ services:
     environment:
       - HOME=/home/user
     depends_on:
-      - blog
+      - parking
 

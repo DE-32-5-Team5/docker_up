@@ -1,17 +1,23 @@
 import subprocess
 import json
 import time
+import yaml
 
 # 스케일링 조건을 위한 설정
 start = 0  # 타이머 초기화
 sca = 1  # 현재 컨테이너 개수
-lim = 1  # CPU 임계값 설정 (예시로 5%로 설정)
+#lim = 1  # CPU 임계값 설정 (예시로 5%로 설정)
+
+# yml 파일을 읽어서 임계값 가져오기
+with open('docker-compose.yml') as f:
+    file = yaml.full_load(f)
+lim = float(file['services']['parking']['deploy']['resources']['limits']['cpus'])
 
 try:
     while True:
         # Docker stats를 통해 특정 컨테이너의 CPU 사용량 가져오기
         r = subprocess.run(
-            ["docker", "stats", "oneshot-blog-1", "--no-stream", "--format", "{{ json .}}"],
+            ["docker", "stats", "oneshot-parking-1", "--no-stream", "--format", "{{ json .}}"],
             capture_output=True, text=True
         )
         
@@ -31,7 +37,7 @@ try:
                     sca += 1
                     start = 0  # 스케일 아웃 후 타이머 초기화
                     # docker compose scale 명령어로 컨테이너 수 조정
-                    subprocess.run(["docker", "compose","up","--scale", f"blog={sca}", "-d"])
+                    subprocess.run(["docker", "compose", "scale", f"parking={sca}"])
 
         # 스케일 인 조건: CPU 사용률이 임계값 이하이고, 컨테이너가 2개 이상일 때
         elif per <= lim and sca > 1:
@@ -44,7 +50,7 @@ try:
                     sca -= 1
                     start = 0  # 스케일 인 후 타이머 초기화
                     # docker compose scale 명령어로 컨테이너 수 조정
-                    subprocess.run(["docker", "compose", "up",  "--scale", f"blog={sca}"], "-d")
+                    subprocess.run(["docker", "compose", "scale", f"parking={sca}"])
 
         # 10초 대기 후 반복
         time.sleep(10)
