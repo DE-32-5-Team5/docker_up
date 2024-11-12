@@ -2,7 +2,7 @@ import sys
 import argparse
 import subprocess
 import os
-from docker_up.init import install
+from docker_up.init import installenv
 from docker_up.init_db import installdb
 
 def main():
@@ -37,7 +37,7 @@ def main():
   elif args.init:
     try:
 
-      install()
+      installenv()
       installdb()		 
       subprocess.run(['docker', 'compose', 'up', '-d'], check=True)
     except subprocess.CalledProcessError as e:

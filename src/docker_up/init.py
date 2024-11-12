@@ -19,12 +19,3 @@ def installenv():
     
     print("env install complete.")
     return
-
-def installdb():
-    if os.path.exists(".init.sql"):
-        print(".init.sql 파일이 이미 존재합니다.")
-        return
-    
-    print("Initialize Database setting...")
-    #TODO
-    #Database에 추가할 Tables를 회의해야함
