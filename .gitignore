@@ -161,8 +161,9 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-ngrinder_data/
-nginx_data/
-ngrinder-controller/
-build/
 
+# ngrinder
+build/
+nginx_data/
+ngrinder_data/
+ngrinder-controller/
