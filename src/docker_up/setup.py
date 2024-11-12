@@ -34,7 +34,7 @@ def main():
   elif args.init:
     try:
       install()		 
-      subprocess.run(['docker', 'compose', 'up', '-d', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml', '--force-rec',], check=True)
+      subprocess.run(['docker', 'compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml', 'up', '-d', '--force-recreate',], check=True)
           
     except subprocess.CalledProcessError as e:
       print(f"오류 발생: {e}")
