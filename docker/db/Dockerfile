@@ -21,5 +21,5 @@ RUN wget https://github.com/prometheus/mysqld_exporter/releases/download/v0.15.1
   && rm mysqld_exporter-0.15.1.linux-amd64.tar.gz
 
 # mysqld_exporter 실행
-RUN cd /download/mysqld_exporter-0.15.1.linux-amd64 && ./mysqld_exporter --config.my-cnf=/download/mysqld_exporter-0.15.1.linux-amd64/setting/.my.cnf
+#RUN cd /download/mysqld_exporter-0.15.1.linux-amd64 && ./mysqld_exporter --config.my-cnf=/download/mysqld_exporter-0.15.1.linux-amd64/setting/.my.cnf
 

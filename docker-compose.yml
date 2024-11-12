@@ -19,8 +19,10 @@ services:
       context: ./docker/blog
       dockerfile: Dockerfile
 
-parking:
-    build: ./docker/httpd
+  parking:
+    build: 
+      context: ./docker/httpd
+      dockerfile: Dockerfile
     ports:
       - 80
     deploy:
@@ -49,7 +51,7 @@ parking:
         
   ng:
     build:
-      context: ./docker/nginx
+      context: ./docker/ngrinder
       dockerfile: Dockerfile
     image: nginx:1.25
     ports:
@@ -59,10 +61,9 @@ parking:
     container_name: nginx_container
     volumes:
       - ./docker/ngrinder/default.conf:/etc/nginx/conf.d/default.conf  # nginx 설정 파일 저장 경로 (필요시 변경)
-      - /prometheus-2.53.3.linux-amd64  # Prometheus 데이터 저장 경로 (필요시 변경) 
       - ./ngrinder_data:/ngrinder-controller-3.5.9-p1  # ngrinder 데이터 저장 경로 (필요시 변경)
     environment:
       - HOME=/home/user
     depends_on:
       - parking
-
+   
