@@ -30,4 +30,4 @@ EXPOSE 8501
 # Streamlit의 health check
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableCORS=false", "headless = true"]
