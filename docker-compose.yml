@@ -17,11 +17,6 @@ services:
     command: > 
       ./mysqld_exporter-0.15.1.linux-amd64/mysqld_exporter --config.my-cnf=/download/mysqld_exporter-0.15.1.linux-amd64/setting/.my.cnf
 
-  blog:
-    build: 
-      context: ./docker/blog
-      dockerfile: Dockerfile
-
   parking:
     build: 
       context: ./docker/httpd
@@ -70,4 +65,8 @@ services:
         #command: /download/prometheus-2.53.3.linux-amd64/prometheus --config.file=/download/prometheus-2.53.3.linux-amd64/prometheus.yml
     depends_on:
       - parking
+<<<<<<< HEAD
    
+=======
+
+>>>>>>> @{-1}
