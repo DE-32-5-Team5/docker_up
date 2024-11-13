@@ -17,6 +17,7 @@ services:
       - ./docker/db/config/mariadb.conf:/etc/mysql/conf.d/mariadb.conf
     networks:
       - monitoring
+
   exporter:
     build:
       context: ./docker/exporter
@@ -35,6 +36,17 @@ services:
       - db 
     networks:
       - monitoring
+
+  fast:
+    build:
+      context: ./docker/fast
+      dockerfile: Dockerfile
+    container_name: fast_container
+    ports:
+      - "8000:8000"
+    networks:
+      - monitoring
+
   parking:
     build: 
       context: ./docker/httpd
@@ -89,6 +101,5 @@ services:
     networks:
       - monitoring
    
-
 networks:
   monitoring:
