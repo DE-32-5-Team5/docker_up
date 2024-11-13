@@ -2,7 +2,7 @@ import sys
 import argparse
 import subprocess
 import os
-from docker_up.init import install
+from docker_up.init import installenv
 
 def main():
   parser = argparse.ArgumentParser(description='BCS 도움말', add_help=False)
@@ -36,13 +36,19 @@ def main():
   elif args.init:
     try:
       install()		 
-
       subprocess.run(['docker', 'compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml', 'up', '-d', '--force-recreate',], check=True)
-          
 
     except subprocess.CalledProcessError as e:
       print("docker-compose 명령어 실행에 실패했습니다.")
       print(f"Error Message : {e}")
+  
+  elif args.down:
+    try:
+      subprocess.run(['docker','compose','down'], check=True)
+    except subprocess.CalledProcessError as e:
+      print("docker-compose 명령어 실행에 실패했습니다.")
+      print(f"Error Message : {e}")
+
 
   elif args.down:
     try:

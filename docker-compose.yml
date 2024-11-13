@@ -12,8 +12,11 @@ services:
       - "3551:3551"  #/prometheus --config.file# 포트 매핑
     volumes:
       - ./docker/db:/download/mysqld_exporter-0.15.1.linux-amd64/setting/
+      - ./docker/db/init:/docker-entrypoint-initdb.d
+      - ./docker/db/config:/etc/mysql/conf.d
     command: > 
       ./mysqld_exporter-0.15.1.linux-amd64/mysqld_exporter --config.my-cnf=/download/mysqld_exporter-0.15.1.linux-amd64/setting/.my.cnf
+
   blog:
     build: 
       context: ./docker/blog
