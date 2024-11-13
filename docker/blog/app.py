@@ -2,6 +2,7 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
+import matplotlib.pyplot as plt
 import subprocess
 import json
 
@@ -51,10 +52,25 @@ def main():
             subprocess.run(["docker", "compose", "scale", f"parking={scale_num}"])
             st.subheader(f'스케일링 완료, 컨테이너 개수 : {scale_num}')
     elif choice == "Graph":
-        st.title("Prometheus")
+        st.title("DashBoard")
         if os.path.exists(file_path):
             df = pd.read_csv(file_path)
+            df['CPU %'] = df['CPU %'].apply(lambda x: float(x[:-2]))
             df
+            # 시각화
+            df_up = df[df['Sclae'] == ' Up']
+            df_down = df[df['Sclae'] == ' Down']
+
+            plt.plot(df.index, df['CPU %'])
+            plt.scatter(df_up.index, df_up['CPU %'], color = 'r', label = "Scale Up")
+            plt.scatter(df_down.index, df_down['CPU %'], color = 'b', label = "Scale Down")
+            plt.title('Scale Graph')
+            plt.xticks(df.index, fontsize = 8)
+            plt.legend()
+            st.pyplot(plt)
+        else:
+            st.header("파일이 없습니다😣")
+            st.text(f"파일 저장 위치 : {file_path}")
 
 if __name__ == '__main__':
     main()
