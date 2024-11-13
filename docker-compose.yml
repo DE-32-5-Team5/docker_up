@@ -88,7 +88,18 @@ services:
       - parking
     networks:
       - monitoring
-   
 
+  fastapi_load_test:
+    image: tiangolo/uvicorn-gunicorn-fastapi:python3.9
+    volumes:
+      - ./src/docker_up/abtest-app.py:/app/abtest-app.py
+    ports:
+      - "8000:8000"
+    command: /bin/bash -c "pip install PyMySql sqlalchemy && fastapi dev abtest-app.py"
+    networks:
+      - monitoring
+    depends_on:
+      - db
+ 
 networks:
   monitoring:
