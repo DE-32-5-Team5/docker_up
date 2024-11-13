@@ -7,14 +7,23 @@ services:
     container_name: mariadb_container
     env_file:
       - .env  # 환경 변수 파일 경로
-      - ./docker/db/.my.cnf # exporter 환경변수 파일경로
     ports:
-      - "3551:3306"  #/prometheus --config.file# 포트 매핑
-      - "9104:9104"  # mysqld_exporter의 9104 포트를 외부에 노출
+      - "6033:3306"
+
+  exporter:
+    image: prom/mysqld-exporter # 이미지 변경
+    container_name: exporter_container
+    env_file:
+      - ./docker/db/.my.cnf 
+    ports:
+      - "3551:9104"  
     volumes:
-      - ./docker/db:/download/mysqld_exporter-0.15.1.linux-amd64/setting/
-        # - ./docker/db/init:/docker-entrypoint-initdb.d
-      - ./docker/db/config/mariadb.conf:/etc/mysql/conf.d/mariadb.conf
+      - ./docker/db:/etc/mysql/conf.d
+    depends_on:
+      - db
+    command: 
+      - --config.my-cnf=/etc/mysql/conf.d/.my.cnf # .my.cnf 파일 경로 수정
+
   blog:
     build: 
       context: ./docker/blog
