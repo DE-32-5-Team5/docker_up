@@ -1,7 +1,7 @@
 import os
 
 def install():
-    if os.path.exists(".env") and os.path.exists("docker/db/.my.cnf"):
+    if os.path.exists(".env"):
         print("env setting file found")
         return
     
@@ -18,7 +18,7 @@ def install():
             f.write(f"MARIADB_USER={user_name}\n")
             f.write(f"MARIADB_PASSWORD={user_password}\n")
     
-    if os.path.exists("docker/db/.my.cnf"):
+    if os.path.exists("docker/db/config/.my.cnf"):
         print("cnf setting file found")
         return
     
