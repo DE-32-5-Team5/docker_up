@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
     command: 
-      - --config.my-cnf=/etc/mysql/conf.d/.my.cnf # .my.cnf 파일 경로 수정
+      - --config.my-cnf=/etc/mysql/conf.d/.my.cnf
 
   blog:
     build: 
