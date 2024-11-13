@@ -9,6 +9,7 @@ def main():
   parser.add_argument('-h', '--help', action='store_true', help='도움말 표시')
   parser.add_argument('-i', '--init', action='store_true', help='패키지 설치')
   parser.add_argument('-d', '--down', action='store_true', help='컨테이너 정지')
+  parser.add_argument('-r', '--remove', action='store_true', help='컨테이너 삭제' )
   args = parser.parse_args()
   if args.help:
     print("""
@@ -53,6 +54,14 @@ def main():
   elif args.down:
     try:
       subprocess.run(['docker','compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml','down'], check=True)
+    except subprocess.CalledProcessError as e:
+      print("docker-compose 명령어 실행에 실패했습니다.")
+      print(f"Error Message : {e}")
+
+  elif args.remove:
+    try:
+      subprocess.run(['docker','compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml','down'], check=True)
+      subprocess.run(['docker','rmi', '-f', 'oneshot-db:latest', 'oneshot-exporter:latest', 'oneshot-parking:latest', 'oneshot-ng:latest'], check=True)
     except subprocess.CalledProcessError as e:
       print("docker-compose 명령어 실행에 실패했습니다.")
       print(f"Error Message : {e}")
