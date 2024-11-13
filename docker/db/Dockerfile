@@ -7,7 +7,6 @@
 
 FROM mariadb:latest
 
-
 WORKDIR /download
 
 RUN apt-get update && apt-get install -y \

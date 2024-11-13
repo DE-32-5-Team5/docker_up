@@ -18,6 +18,8 @@ import os
 #                            cursorclass=pymysql.cursors.DictCursor)
 #  return conn
 
+file_path = "../../data/docker_stats.csv"
+
 def main():
     #st.set_page_config(layout="wide")
     with st.sidebar:
@@ -50,6 +52,9 @@ def main():
             st.subheader(f'스케일링 완료, 컨테이너 개수 : {scale_num}')
     elif choice == "Graph":
         st.title("Prometheus")
+        if os.path.exists(file_path):
+            df = pd.read_csv(file_path)
+            df
 
 if __name__ == '__main__':
     main()
