@@ -2,7 +2,7 @@ import sys
 import argparse
 import subprocess
 import os
-from docker_up.init import installenv
+from docker_up.init import install
 
 def main():
   parser = argparse.ArgumentParser(description='BCS 도움말', add_help=False)
