@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     vim
-#COPY ../../init.sql /docker-entrypoint-initdb.d/
+COPY init/init.sql /docker-entrypoint-initdb.d/
 # mysqld_exporter 다운로드
 RUN wget https://github.com/prometheus/mysqld_exporter/releases/download/v0.15.1/mysqld_exporter-0.15.1.linux-amd64.tar.gz \
   && tar -xvf mysqld_exporter-0.15.1.linux-amd64.tar.gz \
