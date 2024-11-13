@@ -9,14 +9,12 @@ services:
       - .env  # 환경 변수 파일 경로
       - ./docker/db/.my.cnf # exporter 환경변수 파일경로
     ports:
-      - "3551:3551"  #/prometheus --config.file# 포트 매핑
+      - "3551:3306"  #/prometheus --config.file# 포트 매핑
+      - "9104:9104"  # mysqld_exporter의 9104 포트를 외부에 노출
     volumes:
       - ./docker/db:/download/mysqld_exporter-0.15.1.linux-amd64/setting/
-      - ./docker/db/init:/docker-entrypoint-initdb.d
-      - ./docker/db/config:/etc/mysql/conf.d
-    command: > 
-      ./mysqld_exporter-0.15.1.linux-amd64/mysqld_exporter --config.my-cnf=/download/mysqld_exporter-0.15.1.linux-amd64/setting/.my.cnf
-
+        # - ./docker/db/init:/docker-entrypoint-initdb.d
+      - ./docker/db/config/mariadb.conf:/etc/mysql/conf.d/mariadb.conf
   blog:
     build: 
       context: ./docker/blog
