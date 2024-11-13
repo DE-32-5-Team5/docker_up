@@ -3,6 +3,7 @@ nginx_data
 ngrinder_data
 ngrinder-controller
 
+.my.cnf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
