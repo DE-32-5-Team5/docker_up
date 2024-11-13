@@ -1,6 +1,6 @@
 [project]
 name = "docker_up"
-version = "0.2.0"
+version = "0.3.1"
 description = "Default template for PDM package"
 authors = [
     {name = "Life_is_one_Shot", email = "elnath1002@naver.com"},
@@ -10,9 +10,8 @@ requires-python = "==3.11.*"
 readme = "README.md"
 license = {text = "MIT"}
 
-
 [tool.pdm]
-distribution = false
+distribution = true
 
 [project.scripts]
 oneshot = 'docker_up.setup:main'

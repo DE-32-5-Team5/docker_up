@@ -2,11 +2,13 @@ import sys
 import argparse
 import subprocess
 import os
+from docker_up.init import installenv
 
 def main():
   parser = argparse.ArgumentParser(description='BCS 도움말', add_help=False)
   parser.add_argument('-h', '--help', action='store_true', help='도움말 표시')
   parser.add_argument('-i', '--init', action='store_true', help='패키지 설치')
+  parser.add_argument('-d', '--down', action='store_true', help='컨테이너 정지')
   args = parser.parse_args()
   if args.help:
     print("""
@@ -26,18 +28,34 @@ def main():
 	Commands
 	oneshot, oneshot -h, --help		: Show command help screen
 	                 -i, --init		: Install Docker Containers 
+                   -d. --down   : Down Docker Containers and Delete Containers
 	
 
 	"""
 	)
   elif args.init:
     try:
-      subprocess.run(['docker-compose', 'build', '--no-cache'], check=True)
-      subprocess.run(['docker-compose', 'up', '-d'], check=True)
-    except subprocess.CalledProcessError as e:
-      print(f"오류 발생: {e}")
-      print("docker-compose 명령어 실행에 실패했습니다. Docker Compose가 설치되어 있는지 확인해주세요.")
+      install()		 
+      subprocess.run(['docker', 'compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml', 'up', '-d', '--force-recreate',], check=True)
 
+    except subprocess.CalledProcessError as e:
+      print("docker-compose 명령어 실행에 실패했습니다.")
+      print(f"Error Message : {e}")
+  
+  elif args.down:
+    try:
+      subprocess.run(['docker','compose','down'], check=True)
+    except subprocess.CalledProcessError as e:
+      print("docker-compose 명령어 실행에 실패했습니다.")
+      print(f"Error Message : {e}")
+
+
+  elif args.down:
+    try:
+      subprocess.run(['docker','compose', '-f', 'docker-compose.yml', '-f', 'ng-compose.yml','down'], check=True)
+    except subprocess.CalledProcessError as e:
+      print("docker-compose 명령어 실행에 실패했습니다.")
+      print(f"Error Message : {e}")
 
 if __name__ == '__main__':
   main()
