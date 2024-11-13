@@ -1,3 +1,7 @@
+CREATE USER 'exporter'@'%' IDENTIFIED BY 'five2024$' WITH MAX_USER_CONNECTIONS 3;
+GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'%';
+GRANT SLAVE MONITOR ON *.* TO 'exporter'@'%';
+
 USE `parkingissue`;
 
 
