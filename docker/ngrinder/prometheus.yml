@@ -26,8 +26,8 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ["localhost:9090"]
+      - targets: ["nginx_container:9090"]
 
   - job_name: 'mysqld_exporter'
     static_configs:
-      - targets: ['localhost:9104']
+      - targets: ['exporter_container:9104']

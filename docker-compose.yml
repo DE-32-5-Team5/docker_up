@@ -7,20 +7,34 @@ services:
     container_name: mariadb_container
     env_file:
       - .env  # 환경 변수 파일 경로
-      - ./docker/db/.my.cnf # exporter 환경변수 파일경로
+        #- ./docker/db/.my.cnf # exporter 환경변수 파일경로
     ports:
       - "3551:3306"  #/prometheus --config.file# 포트 매핑
+        #- "9104:9104"  # mysqld_exporter의 9104 포트를 외부에 노출
     volumes:
-      - ./docker/db:/download/mysqld_exporter-0.15.1.linux-amd64/setting/
-        #- ./docker/db/init:/docker-entrypoint-initdb.d
-      - ./docker/db/config:/etc/mysql/conf.d
-    command: >
-      /bin/bash -c "
-        /usr/sbin/mysqld &  # MariaDB를 백그라운드에서 실행
-        sleep 5 &&  # MariaDB가 완전히 시작될 때까지 잠시 대기
-        ./mysqld_exporter-0.15.1.linux-amd64/mysqld_exporter --config.my-cnf=/download/mysqld_exporter-0.15.1.linux-amd64/setting/.my.cnf
-      "
-
+        #- ./.env:
+        # - ./docker/db/init:/docker-entrypoint-initdb.d
+      - ./docker/db/config/mariadb.conf:/etc/mysql/conf.d/mariadb.conf
+    networks:
+      - monitoring
+  exporter:
+    build:
+      context: ./docker/exporter
+      dockerfile: Dockerfile
+    container_name: exporter_container
+    environment:
+      - MYSQL_OPTIONS=--defaults-file=/etc/mysql/.my.cnf
+    ports:
+      - "9104:9104"
+    volumes:
+      - ./docker/db:/etc/mysql/conf.d
+      - ./docker/exporter/.my.cnf:/download/mysqld_exporter-0.15.1.linux-amd64/setting/.my.cnf
+    command: 
+      --config.my-cnf=/etc/mysql/conf.d/.my.cnf 
+    depends_on:
+      - db 
+    networks:
+      - monitoring
   parking:
     build: 
       context: ./docker/httpd
@@ -40,6 +54,8 @@ services:
     environment:
       - VIRTUAL_HOST=localhost
       - VIRTUAL_PORT=80
+    networks:
+      - monitoring
 
   dashboard:
     image: grafana/grafana-enterprise
@@ -50,7 +66,8 @@ services:
       - ./grafana-storage:/var/lib/grafana
     user: "0:0"  # root 권한으로 실행
     restart: unless-stopped
-        
+    networks:
+      - monitoring 
   ng:
     build:
       context: ./docker/ngrinder
@@ -69,3 +86,9 @@ services:
         #command: /download/prometheus-2.53.3.linux-amd64/prometheus --config.file=/download/prometheus-2.53.3.linux-amd64/prometheus.yml
     depends_on:
       - parking
+    networks:
+      - monitoring
+   
+
+networks:
+  monitoring:
