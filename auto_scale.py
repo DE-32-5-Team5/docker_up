@@ -26,12 +26,13 @@ csv_file = os.path.join(csv_dir, 'docker_stats.csv')  # 상대 경로로 CSV 파
 if not os.path.exists(csv_file):
     with open(csv_file, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['Container', 'Name', 'CPU %', 'Memory Usage'])
+        writer.writerow(['Container', 'Name', 'CPU %', 'Memory Usage','Sclae'])
 
 
 
 try:
     while True:
+        scale_done = "NO"
         
         # docker stats 명령어 실행 및 oneshot-parking 관련 컨테이너 수 확인
         len_result = subprocess.run(
@@ -61,6 +62,7 @@ try:
             else:  # 넘은 상태가 1분 지속되면 스케일 아웃
                 end = time.time()
                 if end - start >= 60.00:
+                    scale_done = "Up"
                     sca += 1
                     subprocess.run(["docker", "compose", "scale", f"parking={sca}"])
                     print(f"Container가 임계값을 넘은지 1분이 지났습니다. 현재 컨테이너 개수 : {sca}")
@@ -75,6 +77,7 @@ try:
             else:  # 임계값 이하 상태가 1분 지속되면 스케일 인
                 end = time.time()
                 if end - start >= 60.00:
+                    scale_done = "Down"
                     sca -= 1
                     start = 0  # 스케일 인 후 타이머 초기화
                     # docker compose scale 명령어로 컨테이너 수 조정
@@ -83,20 +86,19 @@ try:
 
 
         result = subprocess.run(
-            'docker stats --no-stream --format "table {{.Container}},{{.Name}},{{.CPUPerc}},{{.MemUsage}}" | grep "oneshot-parking"',
+            'docker stats --no-stream --format "table {{.Container}},{{.Name}},{{.CPUPerc}},{{.MemUsage}}" | grep "oneshot-parking-1"',
             capture_output=True, text=True, shell=True
         )
 
          # 출력 결과를 줄 단위로 분리하고 CSV 파일에 저장
-        lines = result.stdout.strip().splitlines()
+        line = result.stdout
+        line =  f"{line.strip()} , {scale_done}"
         
         with open(csv_file, 'a', newline='') as f:
             writer = csv.writer(f)
-            for line in lines:
-                # 쉼표로 분리하여 CSV 파일에 기록
-                data = line.split(',')
-                writer.writerow(data)
-                print(f"데이터 저장: {data}")
+            data = line.split(',')
+            writer.writerow(data)
+            print(f"데이터 저장: {data}")
 
         # 10초 대기 후 반복
         time.sleep(10)
