@@ -87,6 +87,4 @@ $ python auto_scale.py
     - 10초에 한 번씩 docker stats 결과를 CSV 파일에 저장합니다.
 ![alt text](image.png)
 
-### LoadCycle
-
 
