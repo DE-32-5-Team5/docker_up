@@ -9,6 +9,8 @@ import numpy as np
 
 import pymysql.cursors
 import os
+from datetime import datetime
+import requests
 
 from prometheus_api_client import PrometheusConnect
 
@@ -21,8 +23,24 @@ from prometheus_api_client import PrometheusConnect
 #                            database = 'parkingissue',
 #                            cursorclass=pymysql.cursors.DictCursor)
 #  return conn
+def get_cpu_usage():
+    # Prometheus 쿼리: CPU 사용량 (사용된 CPU 시간 비율)
+    query = 'rate(node_cpu_seconds_total{mode="idle"}[1m])'
+    result = prom.custom_query(query)
+
+    # 쿼리 결과를 Pandas DataFrame으로 변환
+    cpu_usage = []
+    for data in result:
+        timestamp = datetime.utcfromtimestamp(int(data['value'][0]))  # Unix 타임스탬프를 datetime으로 변환
+        value = 100 - float(data['value'][1])  # 'idle' 상태가 아닌 CPU 사용량
+        cpu_usage.append([timestamp, value])
+
+    # DataFrame으로 변환
+    df = pd.DataFrame(cpu_usage, columns=['Timestamp', 'CPU Usage (%)'])
+    return df
 
 file_path = "../../data/docker_stats.csv"
+prom = PrometheusConnect(url="http://localhost:9090", disable_ssl=True)
 
 def main():
     #st.set_page_config(layout="wide")
@@ -75,72 +93,7 @@ def main():
             st.header("파일이 없습니다😣")
             st.text(f"파일 저장 위치 : {file_path}")
     else:
-        st.title('될까요?')
-
-        # Prometheus 서버에 연결
-        prom = PrometheusConnect(url="http://localhost:9090", disable_ssl=True)
-
-        # 실시간 서버 사용량 쿼리 함수
-        def get_cpu_usage():
-            # CPU 사용량 (idle 시간을 기반으로 계산)
-            query = '100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)'
-            return prom.custom_query(query=query)
-
-        def get_memory_usage():
-            # 메모리 사용량
-            query = '100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes))'
-            return prom.custom_query(query=query)
-
-        # 데이터프레임 변환 함수
-        def query_to_dataframe(metric_data, metric_name):
-            # Prometheus에서 반환한 데이터를 pandas DataFrame으로 변환
-            df = pd.DataFrame([
-                {
-                    "instance": item["metric"]["instance"],
-                    metric_name: float(item["value"][1])
-                } for item in metric_data
-            ])
-            return df
-
-        # Streamlit 페이지 구성
-        st.title("Server Usage Dashboard")
-        st.subheader("Real-time CPU and Memory Usage")
-
-        # 대시보드 업데이트
-        cpu_data = get_cpu_usage()
-        st.write(cpu_data)
-#        memory_data = get_memory_usage()
-#
-#        # CPU 및 메모리 사용량 데이터프레임 생성
-#        cpu_df = query_to_dataframe(cpu_data, "cpu_usage")
-#        memory_df = query_to_dataframe(memory_data, "memory_usage")
-#
-#        # 데이터 병합
-#        usage_df = pd.merge(cpu_df, memory_df, on="instance", how="inner")
-#
-#        # 데이터 표시
-#        st.write("**CPU & Memory Usage**")
-#        st.write(usage_df)
-#
-#        # 그래프 생성
-#        fig, ax = plt.subplots(2, 1, figsize=(10, 8))
-#
-#        # CPU 사용량 그래프
-#        ax[0].bar(usage_df['instance'], usage_df['cpu_usage'], color='skyblue')
-#        ax[0].set_title("CPU Usage (%)")
-#        ax[0].set_ylabel("Usage (%)")
-#
-#        # 메모리 사용량 그래프
-#        ax[1].bar(usage_df['instance'], usage_df['memory_usage'], color='salmon')
-#        ax[1].set_title("Memory Usage (%)")
-#        ax[1].set_ylabel("Usage (%)")
-#        ax[1].set_xlabel("Instance")
-#
-#        # Streamlit에 그래프 표시
-#        st.pyplot(fig)
-#
-#        # 주기적으로 업데이트하기 위해 10초 간격으로 다시 실행
-#        time.sleep(10)
+        st.title("CPU Usage Dashboard")
 
 
 if __name__ == '__main__':
