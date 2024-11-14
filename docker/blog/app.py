@@ -9,42 +9,26 @@ import numpy as np
 
 import pymysql.cursors
 import os
+import time
 from datetime import datetime
 import requests
 
 from prometheus_api_client import PrometheusConnect
 
-from prometheus_api_client import PrometheusConnect
+file_path = "/home/kimpass189/last_dance/docker_up/data/docker_stats.csv"
+url = "http://localhost:8013/metrics"
 
-# mariadb port : localhost:3551
-#def get_conn():
-#    # 여기 ip나 port나 비번이나 다 바꾸기
-#  conn = pymysql.connect(host=os.getenv("DB_IP","localhost"),
-#                            port=int(os.getenv("MY_PORT", 3551)),
-#                            user = 'fiveguys', password = 'five2024$',
-#                            database = 'parkingissue',
-#                            cursorclass=pymysql.cursors.DictCursor)
-#  return conn
-def get_cpu_usage():
-    # Prometheus 쿼리: CPU 사용량 (사용된 CPU 시간 비율)
-    query = 'rate(node_cpu_seconds_total{mode="idle"}[1m])'
-    result = prom.custom_query(query)
-
-    # 쿼리 결과를 Pandas DataFrame으로 변환
-    cpu_usage = []
-    for data in result:
-        timestamp = datetime.utcfromtimestamp(int(data['value'][0]))  # Unix 타임스탬프를 datetime으로 변환
-        value = 100 - float(data['value'][1])  # 'idle' 상태가 아닌 CPU 사용량
-        cpu_usage.append([timestamp, value])
-
-    # DataFrame으로 변환
-    df = pd.DataFrame(cpu_usage, columns=['Timestamp', 'CPU Usage (%)'])
-    return df
-
-file_path = "../../data/docker_stats.csv"
-prom = PrometheusConnect(url="http://localhost:9090", disable_ssl=True)
-
-file_path = "../../data/docker_stats.csv"
+def fetch_cpu_usage():
+    try:
+        response = requests.get(url)
+        metrics = response.text
+        for line in metrics.splitlines():
+            if line.startswith("process_cpu_seconds_total"):
+                cpu_usage = float(line.split()[-1])
+                return cpu_usage
+    except Exception as e:
+        st.error(f"Failed to fetch metrics: {e}")
+    return None
 
 def main():
     #st.set_page_config(layout="wide")
@@ -97,7 +81,38 @@ def main():
             st.header("파일이 없습니다😣")
             st.text(f"파일 저장 위치 : {file_path}")
     else:
-        st.title("CPU Usage Dashboard")
+        st.title("Real-Time CPU Usage Dashboard")
 
+        # Initialize or load previous data
+        if "cpu_usage_data" not in st.session_state:
+            st.session_state.cpu_usage_data = []
+            st.session_state.timestamps = []
+
+        # Fetch new CPU usage data
+        cpu_usage = fetch_cpu_usage()
+        if cpu_usage is not None:
+            st.session_state.cpu_usage_data.append(cpu_usage)
+            st.session_state.timestamps.append(datetime.now())
+
+        # Ensure lists are of the same length before creating the DataFrame
+        if len(st.session_state.cpu_usage_data) == len(st.session_state.timestamps):
+            # Create a DataFrame for plotting
+            df = pd.DataFrame({
+                'Time': st.session_state.timestamps,
+                'CPU Usage': st.session_state.cpu_usage_data
+            })
+
+            # Plotting
+            plt.figure(figsize=(10, 5))
+            plt.plot(df['Time'], df['CPU Usage'], label="CPU Usage (seconds)")
+            plt.xlabel("Time")
+            plt.ylabel("CPU Usage (seconds)")
+            plt.title("CPU Usage Over Time")
+            plt.legend()
+            st.pyplot(plt)
+
+        # Set refresh interval to 1 minute
+        time.sleep(60)
+        st.experimental_rerun()  # Refreshes the Streamlit app to get new data
 if __name__ == '__main__':
     main()
