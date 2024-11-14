@@ -87,4 +87,21 @@ $ python auto_scale.py
     - 10초에 한 번씩 docker stats 결과를 CSV 파일에 저장합니다.
 ![alt text](image.png)
 
+### Streamlit
+**CPU 사용량 조회**
+
+<img src="https://github.com/user-attachments/assets/697fe7a6-d585-480b-bedc-ca46b63d2a0a" width="70%">
+
+**Manual Scale**
+
+<img src="https://github.com/user-attachments/assets/3a3c63f9-b52c-4b65-b4d3-772be8ba55b7" width="70%">
+<img src="https://github.com/user-attachments/assets/7d68dc1c-5bd7-48b6-a7fe-608099f34efd" width="70%">
+
+**Graph**
+
+<img src="https://github.com/user-attachments/assets/f48f3378-8f40-4411-91e0-295045158908" width="70%">
+
+**Prometheus Client Real Time CPU Usage**
+
+<img src="https://github.com/user-attachments/assets/253ff441-8841-409f-a08f-311483648ff9" width="70%">
 
